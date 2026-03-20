@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Engineering Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>📊 Data Engineering Dashboard</h1>
+        <p class="subtitle">Sales & Analytics Data Warehouse</p>
+    </header>
+
+    <!-- KPI Cards -->
+    <section class="kpi-grid" id="kpi-grid">
+        <div class="kpi-card">
+            <span class="kpi-label">Total Revenue</span>
+            <span class="kpi-value" id="kpi-revenue">--</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">Total Profit</span>
+            <span class="kpi-value" id="kpi-profit">--</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">Total Orders</span>
+            <span class="kpi-value" id="kpi-orders">--</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">Customers</span>
+            <span class="kpi-value" id="kpi-customers">--</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">Avg Order Value</span>
+            <span class="kpi-value" id="kpi-aov">--</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">Bounce Rate</span>
+            <span class="kpi-value" id="kpi-bounce">--</span>
+        </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="charts-grid">
+        <div class="chart-card full-width">
+            <h2>Monthly Revenue & Profit Trend</h2>
+            <canvas id="chart-monthly"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h2>Revenue by Category</h2>
+            <canvas id="chart-category"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h2>Sales by Channel</h2>
+            <canvas id="chart-channel"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h2>Revenue by Country</h2>
+            <canvas id="chart-country"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h2>Customer Segments</h2>
+            <canvas id="chart-segments"></canvas>
+        </div>
+
+        <div class="chart-card full-width">
+            <h2>Sales by Day of Week</h2>
+            <canvas id="chart-daily"></canvas>
+        </div>
+
+        <div class="chart-card full-width">
+            <h2>User Engagement by Channel</h2>
+            <canvas id="chart-engagement"></canvas>
+        </div>
+    </section>
+
+    <!-- Top Products Table -->
+    <section class="table-section">
+        <h2>Top 10 Products by Revenue</h2>
+        <table id="table-products">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Units Sold</th>
+                    <th>Revenue</th>
+                    <th>Profit</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <footer>
+        <p>Data Engineering Project — Python | JavaScript | SQL</p>
+    </footer>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

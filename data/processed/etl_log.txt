@@ -1,0 +1,7 @@
+ETL Pipeline Log
+Run at: 2026-03-20 20:21:23
+
+Extracted: {'customers': 500, 'products': 50, 'dates': 731, 'channels': 6, 'sales': 5000, 'activities': 8000}
+Transformed: {'customers': 500, 'products': 50, 'dates': 731, 'channels': 6, 'sales': 5000, 'activities': 8000}
+Loaded: {'dim_customers': 500, 'dim_products': 50, 'dim_date': 731, 'dim_channels': 6, 'fact_sales': 5000, 'fact_user_activity': 8000}
+Errors: []

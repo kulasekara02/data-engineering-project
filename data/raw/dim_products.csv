@@ -1,0 +1,51 @@
+product_id,product_name,category,subcategory,unit_price,cost_price
+1,Pro Laptop,Electronics,Laptops,224.55,156.16
+2,Ultra Phone,Electronics,Smartphones,649.16,348.25
+3,Wireless Earbuds,Electronics,Headphones,292.44,212.03
+4,Tablet Air,Electronics,Tablets,281.0,194.94
+5,DSLR Camera,Electronics,Cameras,671.56,319.57
+6,Gaming Laptop,Electronics,Laptops,810.96,324.4
+7,Budget Phone,Electronics,Smartphones,513.64,279.68
+8,Noise-Cancel Headphones,Electronics,Headphones,119.79,74.45
+9,E-Reader,Electronics,Tablets,289.81,228.25
+10,Action Camera,Electronics,Cameras,221.54,182.72
+11,Cotton T-Shirt,Clothing,Shirts,164.01,72.58
+12,Slim Jeans,Clothing,Pants,895.29,482.1
+13,Running Shoes,Clothing,Shoes,522.55,250.01
+14,Winter Jacket,Clothing,Jackets,482.99,210.74
+15,Leather Belt,Clothing,Accessories,322.83,246.91
+16,Polo Shirt,Clothing,Shirts,44.4,20.28
+17,Cargo Pants,Clothing,Pants,232.94,149.58
+18,Sneakers,Clothing,Shoes,384.63,271.12
+19,Rain Coat,Clothing,Jackets,500.98,231.37
+20,Sunglasses,Clothing,Accessories,735.47,384.13
+21,Standing Desk,Home & Garden,Furniture,82.31,61.04
+22,Blender Pro,Home & Garden,Kitchen,882.41,388.68
+23,Wall Art Set,Home & Garden,Decor,423.47,186.6
+24,Drill Kit,Home & Garden,Tools,54.65,25.6
+25,LED Floor Lamp,Home & Garden,Lighting,684.94,275.44
+26,Bookshelf,Home & Garden,Furniture,126.95,55.7
+27,Coffee Maker,Home & Garden,Kitchen,598.18,376.92
+28,Throw Pillows,Home & Garden,Decor,891.72,499.66
+29,Tool Box,Home & Garden,Tools,401.57,177.55
+30,Smart Bulbs,Home & Garden,Lighting,554.1,222.34
+31,Python Mastery,Books,Fiction,586.53,388.94
+32,Data Science Guide,Books,Non-Fiction,798.1,406.3
+33,SQL Cookbook,Books,Technical,379.26,178.56
+34,AI Revolution,Books,Self-Help,450.53,318.22
+35,Clean Code,Books,Education,108.56,73.92
+36,Design Patterns,Books,Fiction,137.22,107.44
+37,Machine Learning,Books,Non-Fiction,279.66,178.65
+38,Web Dev Handbook,Books,Technical,440.34,271.69
+39,Cloud Computing,Books,Self-Help,557.18,353.51
+40,DevOps Manual,Books,Education,317.98,137.33
+41,Yoga Mat,Sports,Fitness,1026.59,492.82
+42,Hiking Backpack,Sports,Outdoor,127.83,52.14
+43,Football,Sports,Team Sports,943.2,393.92
+44,Swim Goggles,Sports,Water Sports,1154.92,496.28
+45,Mountain Bike,Sports,Cycling,157.72,67.81
+46,Dumbbells Set,Sports,Fitness,273.23,128.59
+47,Tent 4-Person,Sports,Outdoor,909.03,415.1
+48,Basketball,Sports,Team Sports,623.86,339.74
+49,Surfboard,Sports,Water Sports,450.59,290.83
+50,Cycling Helmet,Sports,Cycling,375.47,210.04
