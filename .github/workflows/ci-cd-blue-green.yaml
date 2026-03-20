@@ -8,6 +8,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: data-engineering-project
   TARGET_COLOR: green  # change to blue/green to switch target
+  GHCR_USERNAME: kulasekara02
 
 jobs:
   build-and-push:
@@ -36,8 +37,10 @@ jobs:
           echo "image=$IMAGE" >> $GITHUB_OUTPUT
           docker build -t $IMAGE .
 
-      - name: Log in to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+      - name: Log in to GHCR with PAT
+        env:
+          CR_PAT: ${{ secrets.GHCR_PAT }}
+        run: echo "$CR_PAT" | docker login ghcr.io -u "${{ env.GHCR_USERNAME }}" --password-stdin
 
       - name: Push image
         run: docker push $IMAGE
