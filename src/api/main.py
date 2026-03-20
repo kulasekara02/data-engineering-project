@@ -219,6 +219,257 @@ def get_engagement():
         return rows_to_dicts(rows)
 
 
+# --- ADVANCED ENDPOINTS (PhD Level) ---
+
+@app.get("/api/advanced/monthly-trend")
+def get_monthly_trend_advanced():
+    """Monthly trend with cumulative revenue, moving average, and MoM change."""
+    with get_db() as conn:
+        rows = conn.execute("""
+            WITH monthly AS (
+                SELECT d.year, d.month, d.month_name,
+                       ROUND(SUM(s.total_amount),2) AS revenue,
+                       ROUND(SUM(s.profit),2) AS profit
+                FROM fact_sales s
+                JOIN dim_date d ON s.date_id = d.date_id
+                GROUP BY d.year, d.month
+            )
+            SELECT year, month, month_name, revenue, profit,
+                ROUND(SUM(revenue) OVER (ORDER BY year, month), 2) AS cumulative_revenue,
+                ROUND(AVG(revenue) OVER (
+                    ORDER BY year, month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+                ), 2) AS moving_avg_3m,
+                ROUND(revenue - LAG(revenue) OVER (ORDER BY year, month), 2) AS mom_change,
+                ROUND((revenue - LAG(revenue) OVER (ORDER BY year, month))
+                    / NULLIF(LAG(revenue) OVER (ORDER BY year, month), 0) * 100, 1) AS mom_pct_change
+            FROM monthly
+        """).fetchall()
+        return rows_to_dicts(rows)
+
+
+@app.get("/api/advanced/rfm")
+def get_rfm_analysis():
+    """RFM (Recency, Frequency, Monetary) customer segmentation."""
+    with get_db() as conn:
+        rows = conn.execute("""
+            WITH rfm_raw AS (
+                SELECT c.customer_id,
+                    c.first_name || ' ' || c.last_name AS customer_name,
+                    c.country,
+                    julianday('2024-12-31') - julianday(MAX(d.full_date)) AS recency_days,
+                    COUNT(DISTINCT s.sale_id) AS frequency,
+                    ROUND(SUM(s.total_amount), 2) AS monetary
+                FROM dim_customers c
+                JOIN fact_sales s ON c.customer_id = s.customer_id
+                JOIN dim_date d ON s.date_id = d.date_id
+                GROUP BY c.customer_id
+            ),
+            rfm_scored AS (
+                SELECT *, NTILE(5) OVER (ORDER BY recency_days DESC) AS r_score,
+                    NTILE(5) OVER (ORDER BY frequency ASC) AS f_score,
+                    NTILE(5) OVER (ORDER BY monetary ASC) AS m_score
+                FROM rfm_raw
+            )
+            SELECT customer_id, customer_name, country,
+                ROUND(recency_days,0) AS recency_days, frequency, monetary,
+                r_score, f_score, m_score,
+                r_score + f_score + m_score AS rfm_total,
+                CASE
+                    WHEN r_score >= 4 AND f_score >= 4 AND m_score >= 4 THEN 'Champions'
+                    WHEN r_score >= 3 AND f_score >= 3 THEN 'Loyal Customers'
+                    WHEN r_score >= 4 AND f_score <= 2 THEN 'New Customers'
+                    WHEN r_score <= 2 AND f_score >= 3 THEN 'At Risk'
+                    WHEN r_score <= 2 AND f_score <= 2 THEN 'Lost'
+                    ELSE 'Potential Loyalists'
+                END AS rfm_segment
+            FROM rfm_scored
+            ORDER BY rfm_total DESC
+        """).fetchall()
+        return rows_to_dicts(rows)
+
+
+@app.get("/api/advanced/rfm-summary")
+def get_rfm_summary():
+    """RFM segment summary counts and averages."""
+    with get_db() as conn:
+        rows = conn.execute("""
+            WITH rfm_raw AS (
+                SELECT c.customer_id,
+                    julianday('2024-12-31') - julianday(MAX(d.full_date)) AS recency_days,
+                    COUNT(DISTINCT s.sale_id) AS frequency,
+                    ROUND(SUM(s.total_amount), 2) AS monetary
+                FROM dim_customers c
+                JOIN fact_sales s ON c.customer_id = s.customer_id
+                JOIN dim_date d ON s.date_id = d.date_id
+                GROUP BY c.customer_id
+            ),
+            rfm_scored AS (
+                SELECT *, NTILE(5) OVER (ORDER BY recency_days DESC) AS r_score,
+                    NTILE(5) OVER (ORDER BY frequency ASC) AS f_score,
+                    NTILE(5) OVER (ORDER BY monetary ASC) AS m_score
+                FROM rfm_raw
+            ),
+            rfm_segmented AS (
+                SELECT *,
+                    CASE
+                        WHEN r_score >= 4 AND f_score >= 4 AND m_score >= 4 THEN 'Champions'
+                        WHEN r_score >= 3 AND f_score >= 3 THEN 'Loyal Customers'
+                        WHEN r_score >= 4 AND f_score <= 2 THEN 'New Customers'
+                        WHEN r_score <= 2 AND f_score >= 3 THEN 'At Risk'
+                        WHEN r_score <= 2 AND f_score <= 2 THEN 'Lost'
+                        ELSE 'Potential Loyalists'
+                    END AS rfm_segment
+                FROM rfm_scored
+            )
+            SELECT rfm_segment, COUNT(*) AS customer_count,
+                ROUND(AVG(monetary),2) AS avg_monetary,
+                ROUND(AVG(frequency),1) AS avg_frequency,
+                ROUND(AVG(recency_days),0) AS avg_recency_days
+            FROM rfm_segmented
+            GROUP BY rfm_segment
+            ORDER BY avg_monetary DESC
+        """).fetchall()
+        return rows_to_dicts(rows)
+
+
+@app.get("/api/advanced/pareto")
+def get_pareto_analysis():
+    """Pareto (80/20) analysis of customer revenue contribution."""
+    with get_db() as conn:
+        rows = conn.execute("""
+            WITH customer_revenue AS (
+                SELECT c.customer_id,
+                    c.first_name || ' ' || c.last_name AS name,
+                    ROUND(SUM(s.total_amount), 2) AS revenue
+                FROM fact_sales s
+                JOIN dim_customers c ON s.customer_id = c.customer_id
+                GROUP BY c.customer_id
+            ),
+            ranked AS (
+                SELECT *,
+                    SUM(revenue) OVER (ORDER BY revenue DESC) AS cumulative_revenue,
+                    SUM(revenue) OVER () AS total_revenue,
+                    ROW_NUMBER() OVER (ORDER BY revenue DESC) AS rank_num,
+                    COUNT(*) OVER () AS total_customers
+                FROM customer_revenue
+            )
+            SELECT rank_num, name, revenue,
+                ROUND(cumulative_revenue, 2) AS cumulative_revenue,
+                ROUND(cumulative_revenue / total_revenue * 100, 1) AS cumulative_pct,
+                ROUND(rank_num * 100.0 / total_customers, 1) AS customer_percentile
+            FROM ranked
+            ORDER BY rank_num
+        """).fetchall()
+        return rows_to_dicts(rows)
+
+
+@app.get("/api/advanced/clv")
+def get_clv_prediction():
+    """Customer Lifetime Value prediction (24-month)."""
+    with get_db() as conn:
+        rows = conn.execute("""
+            WITH customer_metrics AS (
+                SELECT c.customer_id,
+                    c.first_name || ' ' || c.last_name AS name,
+                    c.country,
+                    COUNT(DISTINCT s.sale_id) AS total_purchases,
+                    ROUND(SUM(s.total_amount), 2) AS total_spent,
+                    ROUND(AVG(s.total_amount), 2) AS avg_purchase_value,
+                    COUNT(DISTINCT strftime('%Y-%m', d.full_date)) AS active_months
+                FROM dim_customers c
+                JOIN fact_sales s ON c.customer_id = s.customer_id
+                JOIN dim_date d ON s.date_id = d.date_id
+                GROUP BY c.customer_id
+            )
+            SELECT customer_id, name, country, total_purchases, total_spent,
+                avg_purchase_value, active_months,
+                ROUND(total_purchases * 1.0 / NULLIF(active_months, 0), 2) AS purchase_freq_monthly,
+                ROUND(avg_purchase_value * (total_purchases * 1.0 / NULLIF(active_months, 0)) * 24, 2) AS predicted_clv_24m
+            FROM customer_metrics
+            WHERE total_purchases > 1
+            ORDER BY predicted_clv_24m DESC
+            LIMIT 50
+        """).fetchall()
+        return rows_to_dicts(rows)
+
+
+@app.get("/api/advanced/channel-attribution")
+def get_channel_attribution():
+    """Channel attribution analysis with revenue share and efficiency ranking."""
+    with get_db() as conn:
+        rows = conn.execute("""
+            WITH channel_stats AS (
+                SELECT ch.channel_name, ch.channel_type,
+                    COUNT(s.sale_id) AS conversions,
+                    ROUND(SUM(s.total_amount), 2) AS attributed_revenue,
+                    COUNT(DISTINCT s.customer_id) AS unique_customers,
+                    ROUND(AVG(s.total_amount), 2) AS avg_order_value,
+                    ROUND(SUM(s.profit), 2) AS attributed_profit
+                FROM fact_sales s
+                JOIN dim_channels ch ON s.channel_id = ch.channel_id
+                GROUP BY ch.channel_id
+            )
+            SELECT *,
+                ROUND(attributed_revenue * 100.0 / SUM(attributed_revenue) OVER (), 1) AS revenue_share_pct,
+                ROUND(conversions * 100.0 / SUM(conversions) OVER (), 1) AS conversion_share_pct,
+                ROUND(attributed_profit / NULLIF(attributed_revenue, 0) * 100, 1) AS profit_margin_pct
+            FROM channel_stats
+            ORDER BY attributed_revenue DESC
+        """).fetchall()
+        return rows_to_dicts(rows)
+
+
+@app.get("/api/advanced/stream-windows")
+def get_stream_windows():
+    """Real-time streaming window aggregations."""
+    with get_db() as conn:
+        try:
+            rows = conn.execute("""
+                SELECT * FROM stream_windows ORDER BY window_start DESC LIMIT 50
+            """).fetchall()
+            return rows_to_dicts(rows)
+        except Exception:
+            return []
+
+
+@app.get("/api/advanced/data-quality")
+def get_data_quality():
+    """Latest data quality report."""
+    import glob
+    import json
+    report_dir = os.path.join(BASE_DIR, 'data', 'processed', 'quality_reports')
+    reports = sorted(glob.glob(os.path.join(report_dir, '*.json')))
+    if not reports:
+        return {"message": "No quality reports found. Run the pipeline first."}
+    with open(reports[-1], 'r') as f:
+        return json.load(f)
+
+
+@app.get("/api/advanced/scd-history/{customer_id}")
+def get_scd_history(customer_id: int):
+    """SCD Type 2 history for a specific customer."""
+    with get_db() as conn:
+        try:
+            rows = conn.execute("""
+                SELECT * FROM dim_customers_history
+                WHERE customer_id = ? ORDER BY version
+            """, (customer_id,)).fetchall()
+            return rows_to_dicts(rows)
+        except Exception:
+            return []
+
+
+@app.get("/api/advanced/lineage")
+def get_pipeline_lineage():
+    """Pipeline execution lineage and DAG history."""
+    import json
+    lineage_path = os.path.join(BASE_DIR, 'data', 'processed', 'pipeline_lineage.json')
+    if os.path.exists(lineage_path):
+        with open(lineage_path, 'r') as f:
+            return json.load(f)
+    return {"message": "No lineage data found. Run the pipeline first."}
+
+
 # Serve frontend
 app.mount("/static", StaticFiles(directory=os.path.join(FRONTEND_DIR)), name="static")
 
