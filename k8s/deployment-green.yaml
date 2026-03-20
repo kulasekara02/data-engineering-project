@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-api-green
+  labels:
+    app: data-api
+    color: green
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: data-api
+      color: green
+  template:
+    metadata:
+      labels:
+        app: data-api
+        color: green
+        track: green
+    spec:
+      containers:
+        - name: data-api
+          image: ghcr.io/kulasekara02/data-engineering-project:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: UVICORN_PORT
+              value: "8000"
