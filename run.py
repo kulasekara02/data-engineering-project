@@ -16,17 +16,17 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def run_generate():
-    print("\n🔹 Step 1: Generating synthetic data...\n")
+    print("\n[Step 1] Generating synthetic data...\n")
     subprocess.run([sys.executable, os.path.join(BASE_DIR, 'src', 'etl', 'generate_data.py')], check=True)
 
 
 def run_etl():
-    print("\n🔹 Step 2: Running ETL pipeline...\n")
+    print("\n[Step 2] Running ETL pipeline...\n")
     subprocess.run([sys.executable, os.path.join(BASE_DIR, 'src', 'etl', 'etl_pipeline.py')], check=True)
 
 
 def run_serve():
-    print("\n🔹 Step 3: Starting API server...\n")
+    print("\n[Step 3] Starting API server...\n")
     print("Dashboard: http://localhost:8000")
     print("API Docs:  http://localhost:8000/docs")
     print("Press Ctrl+C to stop.\n")
