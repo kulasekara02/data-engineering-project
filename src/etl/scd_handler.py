@@ -4,12 +4,12 @@ Implements SCD Type 1, Type 2, and Type 3 strategies for dimension management.
 Tracks historical changes with effective dates and version control.
 """
 
-import sqlite3
 import os
+import sqlite3
 from datetime import datetime
 
-BASE_DIR = os.path.join(os.path.dirname(__file__), '..', '..')
-DB_PATH = os.path.join(BASE_DIR, 'data', 'warehouse.db')
+BASE_DIR = os.path.join(os.path.dirname(__file__), "..", "..")
+DB_PATH = os.path.join(BASE_DIR, "data", "warehouse.db")
 
 
 class SCDHandler:
@@ -80,19 +80,22 @@ class SCDHandler:
     def initial_load_customers(self):
         """Load current customers into SCD Type 2 history table."""
         conn = sqlite3.connect(self.db_path)
-        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         # Clear existing history
         conn.execute("DELETE FROM dim_customers_history")
 
         customers = conn.execute("SELECT * FROM dim_customers").fetchall()
         for c in customers:
-            conn.execute("""
+            conn.execute(
+                """
                 INSERT INTO dim_customers_history
                 (customer_id, first_name, last_name, email, country, city, age_group, signup_date,
                  effective_from, effective_to, is_current, version, change_type)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, '9999-12-31', 1, 1, 'INSERT')
-            """, (c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], now))
+            """,
+                (c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], now),
+            )
 
         conn.commit()
         print(f"  Loaded {len(customers)} customers into SCD Type 2 history.")
@@ -101,18 +104,21 @@ class SCDHandler:
     def initial_load_products(self):
         """Load current products into SCD Type 2 history table."""
         conn = sqlite3.connect(self.db_path)
-        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         conn.execute("DELETE FROM dim_products_history")
 
         products = conn.execute("SELECT * FROM dim_products").fetchall()
         for p in products:
-            conn.execute("""
+            conn.execute(
+                """
                 INSERT INTO dim_products_history
                 (product_id, product_name, category, subcategory, unit_price, cost_price,
                  effective_from, effective_to, is_current, version, change_type)
                 VALUES (?, ?, ?, ?, ?, ?, ?, '9999-12-31', 1, 1, 'INSERT')
-            """, (p[0], p[1], p[2], p[3], p[4], p[5], now))
+            """,
+                (p[0], p[1], p[2], p[3], p[4], p[5], now),
+            )
 
         conn.commit()
         print(f"  Loaded {len(products)} products into SCD Type 2 history.")
@@ -124,13 +130,16 @@ class SCDHandler:
         new_data: dict with keys matching customer columns.
         """
         conn = sqlite3.connect(self.db_path)
-        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         # Get current record
-        current = conn.execute("""
+        current = conn.execute(
+            """
             SELECT * FROM dim_customers_history
             WHERE customer_id = ? AND is_current = 1
-        """, (customer_id,)).fetchone()
+        """,
+            (customer_id,),
+        ).fetchone()
 
         if not current:
             print(f"  No current record found for customer {customer_id}")
@@ -138,10 +147,7 @@ class SCDHandler:
             return
 
         # Detect changes
-        field_map = {
-            'first_name': 1, 'last_name': 2, 'email': 3,
-            'country': 4, 'city': 5, 'age_group': 6
-        }
+        field_map = {"first_name": 1, "last_name": 2, "email": 3, "country": 4, "city": 5, "age_group": 6}
         changed_fields = []
         old_values = {}
         new_values = {}
@@ -160,39 +166,56 @@ class SCDHandler:
         current_version = current[12]  # version column
 
         # Close current record
-        conn.execute("""
+        conn.execute(
+            """
             UPDATE dim_customers_history
             SET effective_to = ?, is_current = 0
             WHERE customer_id = ? AND is_current = 1
-        """, (now, customer_id))
+        """,
+            (now, customer_id),
+        )
 
         # Build new record with merged data
         merged = {
-            'first_name': new_data.get('first_name', current[2]),
-            'last_name': new_data.get('last_name', current[3]),
-            'email': new_data.get('email', current[4]),
-            'country': new_data.get('country', current[5]),
-            'city': new_data.get('city', current[6]),
-            'age_group': new_data.get('age_group', current[7]),
-            'signup_date': current[8],
+            "first_name": new_data.get("first_name", current[2]),
+            "last_name": new_data.get("last_name", current[3]),
+            "email": new_data.get("email", current[4]),
+            "country": new_data.get("country", current[5]),
+            "city": new_data.get("city", current[6]),
+            "age_group": new_data.get("age_group", current[7]),
+            "signup_date": current[8],
         }
 
-        conn.execute("""
+        conn.execute(
+            """
             INSERT INTO dim_customers_history
             (customer_id, first_name, last_name, email, country, city, age_group, signup_date,
              effective_from, effective_to, is_current, version, change_type)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, '9999-12-31', 1, ?, 'UPDATE')
-        """, (customer_id, merged['first_name'], merged['last_name'], merged['email'],
-              merged['country'], merged['city'], merged['age_group'], merged['signup_date'],
-              now, current_version + 1))
+        """,
+            (
+                customer_id,
+                merged["first_name"],
+                merged["last_name"],
+                merged["email"],
+                merged["country"],
+                merged["city"],
+                merged["age_group"],
+                merged["signup_date"],
+                now,
+                current_version + 1,
+            ),
+        )
 
         # Log the change
-        conn.execute("""
+        conn.execute(
+            """
             INSERT INTO scd_change_log (table_name, record_id, change_type, changed_fields,
                                         old_values, new_values, changed_at)
             VALUES (?, ?, 'UPDATE', ?, ?, ?, ?)
-        """, ('dim_customers', customer_id, str(changed_fields),
-              str(old_values), str(new_values), now))
+        """,
+            ("dim_customers", customer_id, str(changed_fields), str(old_values), str(new_values), now),
+        )
 
         conn.commit()
         conn.close()
@@ -202,11 +225,14 @@ class SCDHandler:
         """Get full version history for a customer."""
         conn = sqlite3.connect(self.db_path)
         conn.row_factory = sqlite3.Row
-        rows = conn.execute("""
+        rows = conn.execute(
+            """
             SELECT * FROM dim_customers_history
             WHERE customer_id = ?
             ORDER BY version
-        """, (customer_id,)).fetchall()
+        """,
+            (customer_id,),
+        ).fetchall()
         conn.close()
         return [dict(r) for r in rows]
 
@@ -215,24 +241,26 @@ class SCDHandler:
         print("\n  Simulating SCD Type 2 changes...")
 
         # Customer moved to a new city
-        self.apply_scd2_customer_change(1, {'city': 'San Francisco', 'country': 'United States'})
+        self.apply_scd2_customer_change(1, {"city": "San Francisco", "country": "United States"})
 
         # Customer updated their email
-        self.apply_scd2_customer_change(5, {'email': 'newemail5@example.com'})
+        self.apply_scd2_customer_change(5, {"email": "newemail5@example.com"})
 
         # Customer moved to a different country
-        self.apply_scd2_customer_change(10, {'country': 'Germany', 'city': 'Berlin'})
+        self.apply_scd2_customer_change(10, {"country": "Germany", "city": "Berlin"})
 
         # Show history for customer 1
         history = self.get_customer_history(1)
         print(f"\n  Customer 1 version history ({len(history)} versions):")
         for h in history:
-            print(f"    v{h['version']}: {h['city']}, {h['country']} "
-                  f"[{h['effective_from']} to {h['effective_to']}] "
-                  f"{'(current)' if h['is_current'] else '(closed)'}")
+            print(
+                f"    v{h['version']}: {h['city']}, {h['country']} "
+                f"[{h['effective_from']} to {h['effective_to']}] "
+                f"{'(current)' if h['is_current'] else '(closed)'}"
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     handler = SCDHandler()
     handler.setup_scd_tables()
     handler.initial_load_customers()

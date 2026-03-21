@@ -6,8 +6,8 @@ Similar to Apache Airflow concepts but lightweight.
 """
 
 import time
-from datetime import datetime
 from collections import defaultdict
+from datetime import datetime
 from enum import Enum
 
 
@@ -152,7 +152,7 @@ class PipelineDAG:
             if not success:
                 print(f"\n  Pipeline stopped due to failure in: {task_id}")
                 # Skip remaining dependent tasks
-                for remaining_id in execution_order[execution_order.index(task_id) + 1:]:
+                for remaining_id in execution_order[execution_order.index(task_id) + 1 :]:
                     if task_id in self.dependencies.get(remaining_id, set()):
                         self.tasks[remaining_id].status = TaskStatus.SKIPPED
 
@@ -162,17 +162,19 @@ class PipelineDAG:
 
     def _record_lineage(self, task, outcome):
         """Record data lineage for the task."""
-        self.lineage.append({
-            'dag_id': self.dag_id,
-            'task_id': task.task_id,
-            'description': task.description,
-            'status': outcome,
-            'attempt': task.attempt,
-            'start_time': task.start_time.isoformat() if task.start_time else None,
-            'end_time': task.end_time.isoformat() if task.end_time else None,
-            'duration_sec': task.duration_sec,
-            'error': task.error,
-        })
+        self.lineage.append(
+            {
+                "dag_id": self.dag_id,
+                "task_id": task.task_id,
+                "description": task.description,
+                "status": outcome,
+                "attempt": task.attempt,
+                "start_time": task.start_time.isoformat() if task.start_time else None,
+                "end_time": task.end_time.isoformat() if task.end_time else None,
+                "duration_sec": task.duration_sec,
+                "error": task.error,
+            }
+        )
 
     def _print_summary(self):
         total_duration = (self.end_time - self.start_time).total_seconds()

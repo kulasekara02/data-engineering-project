@@ -12,14 +12,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-BASE_DIR = os.path.join(os.path.dirname(__file__), '..', '..')
-DB_PATH = os.path.join(BASE_DIR, 'data', 'warehouse.db')
-FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
+BASE_DIR = os.path.join(os.path.dirname(__file__), "..", "..")
+DB_PATH = os.path.join(BASE_DIR, "data", "warehouse.db")
+FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 
 app = FastAPI(
-    title="Data Engineering API",
-    description="REST API for sales & analytics data warehouse",
-    version="1.0.0"
+    title="Data Engineering API", description="REST API for sales & analytics data warehouse", version="1.0.0"
 )
 
 # Allow frontend to access the API
@@ -48,20 +46,21 @@ def rows_to_dicts(rows):
 
 # --- API ENDPOINTS ---
 
+
 @app.get("/api/overview")
 def get_overview():
     """Dashboard overview with key metrics."""
     with get_db() as conn:
         cur = conn.cursor()
         stats = {}
-        stats['total_revenue'] = cur.execute("SELECT ROUND(SUM(total_amount),2) FROM fact_sales").fetchone()[0]
-        stats['total_profit'] = cur.execute("SELECT ROUND(SUM(profit),2) FROM fact_sales").fetchone()[0]
-        stats['total_orders'] = cur.execute("SELECT COUNT(*) FROM fact_sales").fetchone()[0]
-        stats['total_customers'] = cur.execute("SELECT COUNT(*) FROM dim_customers").fetchone()[0]
-        stats['total_products'] = cur.execute("SELECT COUNT(*) FROM dim_products").fetchone()[0]
-        stats['avg_order_value'] = cur.execute("SELECT ROUND(AVG(total_amount),2) FROM fact_sales").fetchone()[0]
-        stats['total_sessions'] = cur.execute("SELECT COUNT(*) FROM fact_user_activity").fetchone()[0]
-        stats['bounce_rate'] = cur.execute(
+        stats["total_revenue"] = cur.execute("SELECT ROUND(SUM(total_amount),2) FROM fact_sales").fetchone()[0]
+        stats["total_profit"] = cur.execute("SELECT ROUND(SUM(profit),2) FROM fact_sales").fetchone()[0]
+        stats["total_orders"] = cur.execute("SELECT COUNT(*) FROM fact_sales").fetchone()[0]
+        stats["total_customers"] = cur.execute("SELECT COUNT(*) FROM dim_customers").fetchone()[0]
+        stats["total_products"] = cur.execute("SELECT COUNT(*) FROM dim_products").fetchone()[0]
+        stats["avg_order_value"] = cur.execute("SELECT ROUND(AVG(total_amount),2) FROM fact_sales").fetchone()[0]
+        stats["total_sessions"] = cur.execute("SELECT COUNT(*) FROM fact_user_activity").fetchone()[0]
+        stats["bounce_rate"] = cur.execute(
             "SELECT ROUND(SUM(bounce)*100.0/COUNT(*),1) FROM fact_user_activity"
         ).fetchone()[0]
         return stats
@@ -158,7 +157,8 @@ def get_daily_pattern():
 def get_top_products(limit: int = Query(default=10, le=50)):
     """Top products by revenue."""
     with get_db() as conn:
-        rows = conn.execute("""
+        rows = conn.execute(
+            """
             SELECT p.product_name, p.category,
                    SUM(s.quantity) AS units_sold,
                    ROUND(SUM(s.total_amount),2) AS revenue,
@@ -168,7 +168,9 @@ def get_top_products(limit: int = Query(default=10, le=50)):
             GROUP BY p.product_id
             ORDER BY revenue DESC
             LIMIT ?
-        """, (limit,)).fetchall()
+        """,
+            (limit,),
+        ).fetchall()
         return rows_to_dicts(rows)
 
 
@@ -220,6 +222,7 @@ def get_engagement():
 
 
 # --- ADVANCED ENDPOINTS (PhD Level) ---
+
 
 @app.get("/api/advanced/monthly-trend")
 def get_monthly_trend_advanced():
@@ -437,11 +440,12 @@ def get_data_quality():
     """Latest data quality report."""
     import glob
     import json
-    report_dir = os.path.join(BASE_DIR, 'data', 'processed', 'quality_reports')
-    reports = sorted(glob.glob(os.path.join(report_dir, '*.json')))
+
+    report_dir = os.path.join(BASE_DIR, "data", "processed", "quality_reports")
+    reports = sorted(glob.glob(os.path.join(report_dir, "*.json")))
     if not reports:
         return {"message": "No quality reports found. Run the pipeline first."}
-    with open(reports[-1], 'r') as f:
+    with open(reports[-1], "r") as f:
         return json.load(f)
 
 
@@ -450,10 +454,13 @@ def get_scd_history(customer_id: int):
     """SCD Type 2 history for a specific customer."""
     with get_db() as conn:
         try:
-            rows = conn.execute("""
+            rows = conn.execute(
+                """
                 SELECT * FROM dim_customers_history
                 WHERE customer_id = ? ORDER BY version
-            """, (customer_id,)).fetchall()
+            """,
+                (customer_id,),
+            ).fetchall()
             return rows_to_dicts(rows)
         except Exception:
             return []
@@ -463,14 +470,16 @@ def get_scd_history(customer_id: int):
 def get_pipeline_lineage():
     """Pipeline execution lineage and DAG history."""
     import json
-    lineage_path = os.path.join(BASE_DIR, 'data', 'processed', 'pipeline_lineage.json')
+
+    lineage_path = os.path.join(BASE_DIR, "data", "processed", "pipeline_lineage.json")
     if os.path.exists(lineage_path):
-        with open(lineage_path, 'r') as f:
+        with open(lineage_path, "r") as f:
             return json.load(f)
     return {"message": "No lineage data found. Run the pipeline first."}
 
 
 # --- PUBLIC API DATA ENDPOINTS ---
+
 
 @app.get("/api/live/crypto")
 def get_crypto_prices():
@@ -629,4 +638,4 @@ app.mount("/static", StaticFiles(directory=os.path.join(FRONTEND_DIR)), name="st
 
 @app.get("/")
 def serve_dashboard():
-    return FileResponse(os.path.join(FRONTEND_DIR, 'index.html'))
+    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
