@@ -1,4 +1,44 @@
+# Python
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Data (generated at runtime)
+data/raw/
+data/processed/
+data/warehouse.db
+data/raw/api_responses/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+coverage.xml
+htmlcov/
+bandit-report.json
+
+# Environment
+.env
+.env.local
+*.log
+
+# Docker
+docker-compose.override.yml

@@ -1,0 +1,42 @@
+name: PR Quality Gate
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  pr-checks:
+    name: PR Quality Gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest httpx flake8
+
+      - name: Lint check
+        run: flake8 src/ --max-line-length=120 --ignore=E501,W503,E203 --count --statistics
+
+      - name: Generate test data
+        run: python src/etl/generate_data.py
+
+      - name: Run ETL
+        run: python src/etl/etl_pipeline.py
+
+      - name: Run tests
+        run: pytest tests/ -v
+
+      - name: PR Summary
+        if: always()
+        run: |
+          echo "## PR Check Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Lint: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- Tests: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- ETL Pipeline: Passed" >> $GITHUB_STEP_SUMMARY

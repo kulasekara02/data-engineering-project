@@ -1,0 +1,38 @@
+name: Data Quality Check
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 6 AM UTC
+  workflow_dispatch:       # Manual trigger
+
+jobs:
+  data-quality:
+    name: Data Quality Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Generate data
+        run: python src/etl/generate_data.py
+
+      - name: Run ETL pipeline
+        run: python src/etl/etl_pipeline.py
+
+      - name: Run data quality audit
+        run: python src/etl/data_quality.py
+
+      - name: Upload quality report
+        uses: actions/upload-artifact@v4
+        with:
+          name: data-quality-report
+          path: data/processed/quality_reports/
+          retention-days: 30
