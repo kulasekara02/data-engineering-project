@@ -6,7 +6,6 @@ Similar to Apache Airflow concepts but lightweight.
 """
 
 import time
-import traceback
 from datetime import datetime
 from collections import defaultdict
 from enum import Enum
@@ -143,7 +142,7 @@ class PipelineDAG:
 
             if not self._can_run(task_id):
                 task.status = TaskStatus.SKIPPED
-                print(f"    SKIPPED: Dependencies not met")
+                print("    SKIPPED: Dependencies not met")
                 self._record_lineage(task, "skipped")
                 continue
 

@@ -228,7 +228,7 @@ class ETLPipeline:
         """Save ETL run log."""
         log_path = os.path.join(PROCESSED_DIR, 'etl_log.txt')
         with open(log_path, 'w') as f:
-            f.write(f"ETL Pipeline Log\n")
+            f.write("ETL Pipeline Log\n")
             f.write(f"Run at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
             f.write(f"\nExtracted: {self.stats['extracted']}\n")
             f.write(f"Transformed: {self.stats['transformed']}\n")

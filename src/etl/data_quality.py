@@ -184,7 +184,7 @@ class DataQualityEngine:
         """).fetchall()
         total_rev = sum(r[1] for r in countries)
         hhi = sum((r[1] / total_rev) ** 2 for r in countries) * 10000 if total_rev > 0 else 0
-        self._add_result("Distribution", f"Revenue concentration (HHI index)",
+        self._add_result("Distribution", "Revenue concentration (HHI index)",
                          "PASS" if hhi < 2500 else "WARN",
                          f"HHI={hhi:.0f} (>2500=concentrated, <1500=diverse)", "INFO")
 

@@ -8,7 +8,6 @@ import sqlite3
 import os
 import random
 import time
-import json
 from datetime import datetime, timedelta
 from collections import defaultdict
 
