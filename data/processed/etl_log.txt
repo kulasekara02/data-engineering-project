@@ -1,5 +1,5 @@
 ETL Pipeline Log
-Run at: 2026-03-20 20:21:23
+Run at: 2026-03-20 20:37:03
 
 Extracted: {'customers': 500, 'products': 50, 'dates': 731, 'channels': 6, 'sales': 5000, 'activities': 8000}
 Transformed: {'customers': 500, 'products': 50, 'dates': 731, 'channels': 6, 'sales': 5000, 'activities': 8000}

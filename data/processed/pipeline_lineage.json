@@ -1,0 +1,71 @@
+{
+  "dag_id": "data_engineering_pipeline_v3",
+  "lineage": [
+    {
+      "dag_id": "data_engineering_pipeline_v3",
+      "task_id": "generate_data",
+      "description": "Generate synthetic raw data",
+      "status": "success",
+      "attempt": 1,
+      "start_time": "2026-03-20T20:37:03.569637",
+      "end_time": "2026-03-20T20:37:03.633719",
+      "duration_sec": 0.064082,
+      "error": null
+    },
+    {
+      "dag_id": "data_engineering_pipeline_v3",
+      "task_id": "etl_pipeline",
+      "description": "Extract, Transform, Load to warehouse",
+      "status": "success",
+      "attempt": 1,
+      "start_time": "2026-03-20T20:37:03.633719",
+      "end_time": "2026-03-20T20:37:03.824855",
+      "duration_sec": 0.191136,
+      "error": null
+    },
+    {
+      "dag_id": "data_engineering_pipeline_v3",
+      "task_id": "data_quality",
+      "description": "Run data quality audit",
+      "status": "success",
+      "attempt": 1,
+      "start_time": "2026-03-20T20:37:03.824855",
+      "end_time": "2026-03-20T20:37:03.887565",
+      "duration_sec": 0.06271,
+      "error": null
+    },
+    {
+      "dag_id": "data_engineering_pipeline_v3",
+      "task_id": "scd_processing",
+      "description": "Apply SCD Type 2 changes",
+      "status": "success",
+      "attempt": 1,
+      "start_time": "2026-03-20T20:37:03.887565",
+      "end_time": "2026-03-20T20:37:03.919538",
+      "duration_sec": 0.031973,
+      "error": null
+    },
+    {
+      "dag_id": "data_engineering_pipeline_v3",
+      "task_id": "stream_processing",
+      "description": "Run stream processing simulation",
+      "status": "success",
+      "attempt": 1,
+      "start_time": "2026-03-20T20:37:03.919538",
+      "end_time": "2026-03-20T20:37:03.941589",
+      "duration_sec": 0.022051,
+      "error": null
+    },
+    {
+      "dag_id": "data_engineering_pipeline_v3",
+      "task_id": "api_ingestion",
+      "description": "Ingest data from public APIs",
+      "status": "success",
+      "attempt": 1,
+      "start_time": "2026-03-20T20:37:03.941589",
+      "end_time": "2026-03-20T20:37:06.054119",
+      "duration_sec": 2.11253,
+      "error": null
+    }
+  ]
+}

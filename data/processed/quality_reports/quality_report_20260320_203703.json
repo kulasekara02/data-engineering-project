@@ -1,0 +1,423 @@
+{
+  "audit_timestamp": "2026-03-20T20:37:03.887565",
+  "total_checks": 44,
+  "passed": 44,
+  "warnings": 0,
+  "failures": 0,
+  "checks": [
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "dim_customers.first_name null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/500 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "dim_customers.last_name null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/500 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "dim_customers.email null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/500 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "dim_customers.country null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/500 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "dim_customers.city null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/500 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "dim_customers.age_group null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/500 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "dim_products.product_name null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/50 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "dim_products.category null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/50 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "dim_products.subcategory null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/50 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "dim_products.unit_price null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/50 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "dim_products.cost_price null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/50 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "fact_sales.customer_id null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/5000 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "fact_sales.product_id null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/5000 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "fact_sales.date_id null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/5000 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "fact_sales.quantity null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/5000 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "fact_sales.total_amount null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/5000 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "fact_sales.profit null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/5000 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "fact_user_activity.customer_id null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/8000 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "fact_user_activity.date_id null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/8000 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "fact_user_activity.session_duration_sec null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/8000 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Completeness",
+      "check": "fact_user_activity.pages_viewed null check",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0/8000 nulls (0.0%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Uniqueness",
+      "check": "dim_customers.customer_id uniqueness",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 duplicates found"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Uniqueness",
+      "check": "dim_customers.email uniqueness",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 duplicates found"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Uniqueness",
+      "check": "dim_products.product_id uniqueness",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 duplicates found"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Uniqueness",
+      "check": "fact_sales.sale_id uniqueness",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 duplicates found"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Uniqueness",
+      "check": "fact_user_activity.activity_id uniqueness",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 duplicates found"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Referential Integrity",
+      "check": "fact_sales.customer_id -> dim_customers.customer_id",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 orphan records"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Referential Integrity",
+      "check": "fact_sales.product_id -> dim_products.product_id",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 orphan records"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Referential Integrity",
+      "check": "fact_sales.date_id -> dim_date.date_id",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 orphan records"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Referential Integrity",
+      "check": "fact_sales.channel_id -> dim_channels.channel_id",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 orphan records"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Referential Integrity",
+      "check": "fact_user_activity.customer_id -> dim_customers.customer_id",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 orphan records"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Referential Integrity",
+      "check": "fact_user_activity.date_id -> dim_date.date_id",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 orphan records"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Referential Integrity",
+      "check": "fact_user_activity.channel_id -> dim_channels.channel_id",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 orphan records"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.840529",
+      "category": "Outliers",
+      "check": "Sales amount IQR outliers",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "161 outliers (3.22%), bounds=[-1590.75, 3913.01]"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.854468",
+      "category": "Outliers",
+      "check": "Session duration Z-score outliers (|z|>3)",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "details": "0 outliers (mean=632s, std=593s)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.854468",
+      "category": "Distribution",
+      "check": "Category sales distribution (CV)",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "details": "CV=1.7% across 5 categories"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.856211",
+      "category": "Distribution",
+      "check": "Revenue concentration (HHI index)",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "HHI=1288 (>2500=concentrated, <1500=diverse)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.856211",
+      "category": "Distribution",
+      "check": "Benford's Law compliance (sales amounts)",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "Max digit deviation=0.0335 (threshold=0.05)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.856211",
+      "category": "Temporal",
+      "check": "Sales date coverage",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "details": "730/731 dates covered (99.9%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.856211",
+      "category": "Temporal",
+      "check": "Weekend sales ratio",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "28.5% of sales on weekends (expected ~28.6%)"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.856211",
+      "category": "Business Rules",
+      "check": "No negative sale amounts",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 negative sales found"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.856211",
+      "category": "Business Rules",
+      "check": "Positive sale quantities",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 zero/negative quantities"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.856211",
+      "category": "Business Rules",
+      "check": "Product margin validation (cost < price)",
+      "status": "PASS",
+      "severity": "INFO",
+      "details": "0 products with cost >= price"
+    },
+    {
+      "timestamp": "2026-03-20T20:37:03.856211",
+      "category": "Business Rules",
+      "check": "Bounce sessions page view check (<= 3)",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "details": "0 bounce sessions with >3 pages"
+    }
+  ],
+  "profiles": {
+    "fact_sales.total_amount": {
+      "count": 5000,
+      "min": 37.74,
+      "max": 5774.6,
+      "mean": 1298.6,
+      "median": 975.92,
+      "std": 1074.73,
+      "total": 6492980.62,
+      "skewness": 1.255
+    },
+    "fact_sales.quantity": {
+      "count": 5000,
+      "min": 1.0,
+      "max": 5.0,
+      "mean": 2.98,
+      "median": 3.0,
+      "std": 1.42,
+      "total": 14919.0,
+      "skewness": 0.02
+    },
+    "fact_sales.profit": {
+      "count": 5000,
+      "min": -27.44,
+      "max": 3293.2,
+      "mean": 562.51,
+      "median": 365.22,
+      "std": 565.25,
+      "total": 2812549.23,
+      "skewness": 1.63
+    },
+    "fact_sales.discount": {
+      "count": 5000,
+      "min": 0.0,
+      "max": 0.2,
+      "mean": 0.07,
+      "median": 0.05,
+      "std": 0.07,
+      "total": 351.4,
+      "skewness": 0.565
+    },
+    "fact_user_activity.session_duration_sec": {
+      "count": 8000,
+      "min": 5.0,
+      "max": 1800.0,
+      "mean": 631.54,
+      "median": 515.5,
+      "std": 592.89,
+      "total": 5052298.0,
+      "skewness": 0.449
+    },
+    "fact_user_activity.pages_viewed": {
+      "count": 8000,
+      "min": 1.0,
+      "max": 20.0,
+      "mean": 7.6,
+      "median": 6.0,
+      "std": 6.51,
+      "total": 60788.0,
+      "skewness": 0.474
+    }
+  }
+}

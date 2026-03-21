@@ -470,6 +470,159 @@ def get_pipeline_lineage():
     return {"message": "No lineage data found. Run the pipeline first."}
 
 
+# --- PUBLIC API DATA ENDPOINTS ---
+
+@app.get("/api/live/crypto")
+def get_crypto_prices():
+    """Live cryptocurrency prices from CoinGecko."""
+    with get_db() as conn:
+        try:
+            rows = conn.execute("""
+                SELECT name, symbol, current_price_usd, market_cap, total_volume,
+                       price_change_24h, price_change_pct_24h, high_24h, low_24h,
+                       circulating_supply, rank, last_updated
+                FROM api_crypto_prices ORDER BY rank LIMIT 30
+            """).fetchall()
+            return rows_to_dicts(rows)
+        except Exception:
+            return []
+
+
+@app.get("/api/live/crypto/summary")
+def get_crypto_summary():
+    """Crypto market summary stats."""
+    with get_db() as conn:
+        try:
+            row = conn.execute("""
+                SELECT COUNT(*) as total_coins,
+                       ROUND(SUM(market_cap), 0) as total_market_cap,
+                       ROUND(SUM(total_volume), 0) as total_volume_24h,
+                       ROUND(AVG(price_change_pct_24h), 2) as avg_change_pct,
+                       SUM(CASE WHEN price_change_pct_24h > 0 THEN 1 ELSE 0 END) as gainers,
+                       SUM(CASE WHEN price_change_pct_24h <= 0 THEN 1 ELSE 0 END) as losers
+                FROM api_crypto_prices
+            """).fetchone()
+            return dict(row)
+        except Exception:
+            return {}
+
+
+@app.get("/api/live/countries")
+def get_countries():
+    """Country data from REST Countries API."""
+    with get_db() as conn:
+        try:
+            rows = conn.execute("""
+                SELECT name, capital, region, subregion, population, area,
+                       languages, currencies, flag_emoji, latitude, longitude
+                FROM api_countries
+                WHERE population > 0
+                ORDER BY population DESC
+            """).fetchall()
+            return rows_to_dicts(rows)
+        except Exception:
+            return []
+
+
+@app.get("/api/live/countries/by-region")
+def get_countries_by_region():
+    """Countries aggregated by region."""
+    with get_db() as conn:
+        try:
+            rows = conn.execute("""
+                SELECT region, COUNT(*) as country_count,
+                       SUM(population) as total_population,
+                       ROUND(SUM(area), 0) as total_area,
+                       ROUND(AVG(population), 0) as avg_population
+                FROM api_countries
+                WHERE region != '' AND population > 0
+                GROUP BY region
+                ORDER BY total_population DESC
+            """).fetchall()
+            return rows_to_dicts(rows)
+        except Exception:
+            return []
+
+
+@app.get("/api/live/weather")
+def get_weather():
+    """Current weather for major cities."""
+    with get_db() as conn:
+        try:
+            rows = conn.execute("""
+                SELECT city, country, temperature_c, wind_speed_kmh,
+                       humidity_pct, weather_desc, measured_at
+                FROM api_weather ORDER BY city
+            """).fetchall()
+            return rows_to_dicts(rows)
+        except Exception:
+            return []
+
+
+@app.get("/api/live/exchange-rates")
+def get_exchange_rates():
+    """USD exchange rates."""
+    with get_db() as conn:
+        try:
+            rows = conn.execute("""
+                SELECT target_currency, rate, rate_date
+                FROM api_exchange_rates ORDER BY target_currency
+            """).fetchall()
+            return rows_to_dicts(rows)
+        except Exception:
+            return []
+
+
+@app.get("/api/live/github")
+def get_github_repos():
+    """Trending GitHub repositories."""
+    with get_db() as conn:
+        try:
+            rows = conn.execute("""
+                SELECT repo_name, full_name, description, language,
+                       stars, forks, open_issues, watchers, html_url
+                FROM api_github_trending ORDER BY stars DESC
+            """).fetchall()
+            return rows_to_dicts(rows)
+        except Exception:
+            return []
+
+
+@app.get("/api/live/github/by-language")
+def get_github_by_language():
+    """GitHub repos grouped by language."""
+    with get_db() as conn:
+        try:
+            rows = conn.execute("""
+                SELECT COALESCE(language, 'Unknown') as language,
+                       COUNT(*) as repo_count,
+                       SUM(stars) as total_stars,
+                       SUM(forks) as total_forks,
+                       ROUND(AVG(stars), 0) as avg_stars
+                FROM api_github_trending
+                GROUP BY language
+                ORDER BY total_stars DESC
+            """).fetchall()
+            return rows_to_dicts(rows)
+        except Exception:
+            return []
+
+
+@app.get("/api/live/ingestion-log")
+def get_ingestion_log():
+    """API ingestion history log."""
+    with get_db() as conn:
+        try:
+            rows = conn.execute("""
+                SELECT source, status, records_count, error_message,
+                       started_at, completed_at
+                FROM api_ingestion_log ORDER BY started_at DESC
+            """).fetchall()
+            return rows_to_dicts(rows)
+        except Exception:
+            return []
+
+
 # Serve frontend
 app.mount("/static", StaticFiles(directory=os.path.join(FRONTEND_DIR)), name="static")
 

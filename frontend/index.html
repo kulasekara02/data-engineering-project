@@ -3,102 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Engineering Dashboard</title>
+    <title>Data Engineering Platform - Advanced Analytics</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <header>
-        <h1>📊 Data Engineering Dashboard</h1>
-        <p class="subtitle">Sales & Analytics Data Warehouse</p>
+        <h1>Data Engineering Platform</h1>
+        <p class="subtitle">Advanced Analytics | ETL Pipeline | Real-Time Streaming | Live API Data | Data Quality</p>
+        <nav class="nav-tabs">
+            <button class="tab active" data-tab="overview">Overview</button>
+            <button class="tab" data-tab="advanced">Advanced Analytics</button>
+            <button class="tab" data-tab="livedata">Live API Data</button>
+            <button class="tab" data-tab="streaming">Stream Processing</button>
+            <button class="tab" data-tab="quality">Data Quality</button>
+            <button class="tab" data-tab="lineage">Pipeline Lineage</button>
+        </nav>
     </header>
 
-    <!-- KPI Cards -->
-    <section class="kpi-grid" id="kpi-grid">
-        <div class="kpi-card">
-            <span class="kpi-label">Total Revenue</span>
-            <span class="kpi-value" id="kpi-revenue">--</span>
-        </div>
-        <div class="kpi-card">
-            <span class="kpi-label">Total Profit</span>
-            <span class="kpi-value" id="kpi-profit">--</span>
-        </div>
-        <div class="kpi-card">
-            <span class="kpi-label">Total Orders</span>
-            <span class="kpi-value" id="kpi-orders">--</span>
-        </div>
-        <div class="kpi-card">
-            <span class="kpi-label">Customers</span>
-            <span class="kpi-value" id="kpi-customers">--</span>
-        </div>
-        <div class="kpi-card">
-            <span class="kpi-label">Avg Order Value</span>
-            <span class="kpi-value" id="kpi-aov">--</span>
-        </div>
-        <div class="kpi-card">
-            <span class="kpi-label">Bounce Rate</span>
-            <span class="kpi-value" id="kpi-bounce">--</span>
-        </div>
-    </section>
+    <!-- ===== TAB: OVERVIEW ===== -->
+    <div id="tab-overview" class="tab-content active">
+        <section class="kpi-grid" id="kpi-grid">
+            <div class="kpi-card"><span class="kpi-label">Total Revenue</span><span class="kpi-value" id="kpi-revenue">--</span></div>
+            <div class="kpi-card"><span class="kpi-label">Total Profit</span><span class="kpi-value" id="kpi-profit">--</span></div>
+            <div class="kpi-card"><span class="kpi-label">Total Orders</span><span class="kpi-value" id="kpi-orders">--</span></div>
+            <div class="kpi-card"><span class="kpi-label">Customers</span><span class="kpi-value" id="kpi-customers">--</span></div>
+            <div class="kpi-card"><span class="kpi-label">Avg Order Value</span><span class="kpi-value" id="kpi-aov">--</span></div>
+            <div class="kpi-card"><span class="kpi-label">Bounce Rate</span><span class="kpi-value" id="kpi-bounce">--</span></div>
+        </section>
 
-    <!-- Charts -->
-    <section class="charts-grid">
-        <div class="chart-card full-width">
-            <h2>Monthly Revenue & Profit Trend</h2>
-            <canvas id="chart-monthly"></canvas>
-        </div>
+        <section class="charts-grid">
+            <div class="chart-card full-width"><h2>Monthly Revenue & Profit Trend</h2><canvas id="chart-monthly"></canvas></div>
+            <div class="chart-card"><h2>Revenue by Category</h2><canvas id="chart-category"></canvas></div>
+            <div class="chart-card"><h2>Sales by Channel</h2><canvas id="chart-channel"></canvas></div>
+            <div class="chart-card"><h2>Revenue by Country</h2><canvas id="chart-country"></canvas></div>
+            <div class="chart-card"><h2>Customer Segments</h2><canvas id="chart-segments"></canvas></div>
+            <div class="chart-card full-width"><h2>Sales by Day of Week</h2><canvas id="chart-daily"></canvas></div>
+            <div class="chart-card full-width"><h2>User Engagement by Channel</h2><canvas id="chart-engagement"></canvas></div>
+        </section>
 
-        <div class="chart-card">
-            <h2>Revenue by Category</h2>
-            <canvas id="chart-category"></canvas>
-        </div>
+        <section class="table-section">
+            <h2>Top 10 Products by Revenue</h2>
+            <table id="table-products">
+                <thead><tr><th>#</th><th>Product</th><th>Category</th><th>Units Sold</th><th>Revenue</th><th>Profit</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </div>
 
-        <div class="chart-card">
-            <h2>Sales by Channel</h2>
-            <canvas id="chart-channel"></canvas>
-        </div>
+    <!-- ===== TAB: ADVANCED ANALYTICS ===== -->
+    <div id="tab-advanced" class="tab-content">
+        <h2 class="section-title">Advanced Analytics (PhD Level)</h2>
 
-        <div class="chart-card">
-            <h2>Revenue by Country</h2>
-            <canvas id="chart-country"></canvas>
-        </div>
+        <section class="charts-grid">
+            <div class="chart-card full-width">
+                <h2>Cumulative Revenue & 3-Month Moving Average</h2>
+                <canvas id="chart-trend-advanced"></canvas>
+            </div>
+            <div class="chart-card">
+                <h2>RFM Customer Segmentation</h2>
+                <canvas id="chart-rfm"></canvas>
+            </div>
+            <div class="chart-card">
+                <h2>Channel Attribution (Revenue Share)</h2>
+                <canvas id="chart-attribution"></canvas>
+            </div>
+            <div class="chart-card full-width">
+                <h2>Pareto Analysis (Customer Revenue Contribution)</h2>
+                <canvas id="chart-pareto"></canvas>
+            </div>
+        </section>
 
-        <div class="chart-card">
-            <h2>Customer Segments</h2>
-            <canvas id="chart-segments"></canvas>
-        </div>
+        <section class="table-section">
+            <h2>Top Customer Lifetime Value Predictions (24-Month)</h2>
+            <table id="table-clv">
+                <thead><tr><th>#</th><th>Customer</th><th>Country</th><th>Purchases</th><th>Total Spent</th><th>Freq/Month</th><th>Predicted CLV</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
 
-        <div class="chart-card full-width">
-            <h2>Sales by Day of Week</h2>
-            <canvas id="chart-daily"></canvas>
-        </div>
+        <section class="table-section">
+            <h2>RFM Segment Summary</h2>
+            <table id="table-rfm">
+                <thead><tr><th>Segment</th><th>Customers</th><th>Avg Monetary</th><th>Avg Frequency</th><th>Avg Recency (days)</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </div>
 
-        <div class="chart-card full-width">
-            <h2>User Engagement by Channel</h2>
-            <canvas id="chart-engagement"></canvas>
-        </div>
-    </section>
+    <!-- ===== TAB: LIVE API DATA ===== -->
+    <div id="tab-livedata" class="tab-content">
+        <h2 class="section-title">Live Public API Data (Real-Time Ingestion)</h2>
 
-    <!-- Top Products Table -->
-    <section class="table-section">
-        <h2>Top 10 Products by Revenue</h2>
-        <table id="table-products">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Product</th>
-                    <th>Category</th>
-                    <th>Units Sold</th>
-                    <th>Revenue</th>
-                    <th>Profit</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </section>
+        <!-- Crypto Section -->
+        <section class="kpi-grid" id="crypto-kpis">
+            <div class="kpi-card"><span class="kpi-label">Total Market Cap</span><span class="kpi-value" id="crypto-mcap">--</span></div>
+            <div class="kpi-card"><span class="kpi-label">24h Volume</span><span class="kpi-value" id="crypto-vol">--</span></div>
+            <div class="kpi-card"><span class="kpi-label">Avg Change 24h</span><span class="kpi-value" id="crypto-change">--</span></div>
+            <div class="kpi-card"><span class="kpi-label">Gainers / Losers</span><span class="kpi-value" id="crypto-gl">--</span></div>
+        </section>
+
+        <section class="charts-grid">
+            <div class="chart-card full-width">
+                <h2>Top Cryptocurrencies by Market Cap (CoinGecko API)</h2>
+                <canvas id="chart-crypto"></canvas>
+            </div>
+            <div class="chart-card">
+                <h2>World Population by Region (REST Countries API)</h2>
+                <canvas id="chart-regions"></canvas>
+            </div>
+            <div class="chart-card">
+                <h2>GitHub Top Repos by Language (GitHub API)</h2>
+                <canvas id="chart-github-lang"></canvas>
+            </div>
+            <div class="chart-card full-width">
+                <h2>Current Weather - Major Cities (Open-Meteo API)</h2>
+                <canvas id="chart-weather"></canvas>
+            </div>
+            <div class="chart-card full-width">
+                <h2>USD Exchange Rates (Frankfurter API)</h2>
+                <canvas id="chart-forex"></canvas>
+            </div>
+        </section>
+
+        <section class="table-section">
+            <h2>Top 20 Cryptocurrencies</h2>
+            <table id="table-crypto">
+                <thead><tr><th>#</th><th>Name</th><th>Symbol</th><th>Price (USD)</th><th>24h Change</th><th>Market Cap</th><th>Volume 24h</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section class="table-section">
+            <h2>GitHub Trending Repositories</h2>
+            <table id="table-github">
+                <thead><tr><th>#</th><th>Repository</th><th>Language</th><th>Stars</th><th>Forks</th><th>Description</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section class="table-section">
+            <h2>Top Countries by Population</h2>
+            <table id="table-countries">
+                <thead><tr><th>#</th><th>Country</th><th>Capital</th><th>Region</th><th>Population</th><th>Area (km2)</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section class="table-section">
+            <h2>API Ingestion Log</h2>
+            <table id="table-ingestion">
+                <thead><tr><th>Source</th><th>Status</th><th>Records</th><th>Started</th><th>Completed</th><th>Error</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- ===== TAB: STREAMING ===== -->
+    <div id="tab-streaming" class="tab-content">
+        <h2 class="section-title">Real-Time Stream Processing</h2>
+        <section class="charts-grid">
+            <div class="chart-card full-width">
+                <h2>Streaming Window Events & Revenue</h2>
+                <canvas id="chart-stream"></canvas>
+            </div>
+        </section>
+        <section class="table-section">
+            <h2>Stream Window Aggregations</h2>
+            <table id="table-stream">
+                <thead><tr><th>Window</th><th>Events</th><th>Revenue</th><th>Customers</th><th>Page Views</th><th>Purchases</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- ===== TAB: DATA QUALITY ===== -->
+    <div id="tab-quality" class="tab-content">
+        <h2 class="section-title">Data Quality Audit Report</h2>
+        <section class="kpi-grid" id="quality-kpis">
+            <div class="kpi-card kpi-pass"><span class="kpi-label">Passed</span><span class="kpi-value" id="q-passed">--</span></div>
+            <div class="kpi-card kpi-warn"><span class="kpi-label">Warnings</span><span class="kpi-value" id="q-warnings">--</span></div>
+            <div class="kpi-card kpi-fail"><span class="kpi-label">Failures</span><span class="kpi-value" id="q-failures">--</span></div>
+            <div class="kpi-card"><span class="kpi-label">Quality Score</span><span class="kpi-value" id="q-score">--</span></div>
+        </section>
+        <section class="charts-grid">
+            <div class="chart-card"><h2>Checks by Category</h2><canvas id="chart-quality-cat"></canvas></div>
+            <div class="chart-card"><h2>Pass/Warn/Fail Distribution</h2><canvas id="chart-quality-status"></canvas></div>
+        </section>
+        <section class="table-section">
+            <h2>Quality Check Details</h2>
+            <table id="table-quality">
+                <thead><tr><th>Status</th><th>Severity</th><th>Category</th><th>Check</th><th>Details</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- ===== TAB: LINEAGE ===== -->
+    <div id="tab-lineage" class="tab-content">
+        <h2 class="section-title">Pipeline Execution Lineage (DAG)</h2>
+        <section class="charts-grid">
+            <div class="chart-card full-width">
+                <h2>Task Execution Timeline</h2>
+                <canvas id="chart-lineage"></canvas>
+            </div>
+        </section>
+        <section class="table-section">
+            <h2>DAG Task Execution Log</h2>
+            <table id="table-lineage">
+                <thead><tr><th>Task</th><th>Description</th><th>Status</th><th>Attempt</th><th>Duration</th><th>Error</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </div>
 
     <footer>
-        <p>Data Engineering Project — Python | JavaScript | SQL</p>
+        <p>Data Engineering Platform | Python | JavaScript | SQL | ETL | Streaming | Data Quality | DAG Orchestration</p>
     </footer>
 
     <script src="/static/js/dashboard.js"></script>
